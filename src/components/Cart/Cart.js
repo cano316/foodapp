@@ -1,5 +1,5 @@
 import classes from './Cart.module.css';
-
+import CartModal from '../UI/CartModal';
 const Cart = (props) => {
     const cartItems = [
         { id: 'c1', name: 'Quesadilla', amount: 2, price: 8.99 },
@@ -10,17 +10,17 @@ const Cart = (props) => {
 
     const cartItemsList = <ul className={classes['cart-items']}>{cartItems.map(item => <li>{item.name}</li>)}</ul>
     return (
-        <div>
+        <CartModal onDismissCart={props.onDismissCart}>
             {cartItemsList}
             <div className={classes.total}>
                 <span>Total Amount</span>
                 <span>$42.96</span>
             </div>
             <div className={classes.actions}>
-                <button className={classes['button--alt']}>Close</button>
+                <button className={classes['button--alt']} onClick={props.onDismissCart}>Close</button>
                 <button className={classes.button}>Order</button>
             </div>
-        </div>
+        </CartModal>
     )
 };
 
