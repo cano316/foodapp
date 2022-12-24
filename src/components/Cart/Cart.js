@@ -8,16 +8,17 @@ const Cart = (props) => {
         { id: 'c4', name: 'Tostada de Ceviche', amount: 1, price: 10.99 },
     ];
 
-    const cartItemsList = <ul className={classes['cart-items']}>{cartItems.map(item => <li>{item.name}</li>)}</ul>
+    const cartItemsList = <ul className={classes['cart-items']}>{cartItems.map(item => <li>{item.name}</li>)}</ul>;
+
     return (
-        <CartModal onDismissCart={props.onDismissCart}>
+        <CartModal onDismissCart={props.onDismiss}>
             {cartItemsList}
             <div className={classes.total}>
                 <span>Total Amount</span>
                 <span>$42.96</span>
             </div>
             <div className={classes.actions}>
-                <button className={classes['button--alt']} onClick={props.onDismissCart}>Close</button>
+                <button className={classes['button--alt']} onClick={props.onDismiss}>Close</button>
                 <button className={classes.button}>Order</button>
             </div>
         </CartModal>
