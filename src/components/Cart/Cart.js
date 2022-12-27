@@ -1,25 +1,45 @@
 import classes from './Cart.module.css';
 import CartModal from '../UI/CartModal';
-const Cart = (props) => {
-    const cartItems = [
-        { id: 'c1', name: 'Quesadilla', amount: 2, price: 8.99 },
-        { id: 'c2', name: 'Asada Tacos', amount: 4, price: 2.99 },
-        { id: 'c3', name: 'Caldo de Camaron', amount: 1, price: 18.99 },
-        { id: 'c4', name: 'Tostada de Ceviche', amount: 1, price: 10.99 },
-    ];
+import { useContext } from 'react';
+import CartContext from '../../store/cart-context';
+import CartItem from './CartItem';
 
-    const cartItemsList = <ul className={classes['cart-items']}>{cartItems.map(item => <li>{item.name}</li>)}</ul>;
+const Cart = (props) => {
+    const cartCtx = useContext(CartContext);
+    const cartItems = cartCtx.items;
+    const cartItemRemoveHandler = (id) => {
+        cartCtx.removeItem(id)
+    };
+    const cartItemAddHandler = (item) => {
+        // this allows us to click on the '+' in the cart modal to increase the amount
+        cartCtx.addItem({ ...item, amount: 1 })
+    };
+
+    const cartItemsList = (
+        <ul className={classes['cart-items']}>
+            {cartItems.map(item => <CartItem
+                key={item.id}
+                price={item.price}
+                amount={item.amount}
+                name={item.name}
+                onRemove={cartItemRemoveHandler.bind(null, item.id)}
+                onAdd={cartItemAddHandler.bind(null, item)}
+            />)}
+        </ul>
+    );
+    // check to see if user has any items in their cart
+    const hasItems = cartItems.length > 0;
 
     return (
         <CartModal onDismissCart={props.onDismiss}>
             {cartItemsList}
             <div className={classes.total}>
                 <span>Total Amount</span>
-                <span>$42.96</span>
+                <span>{`$${cartCtx.totalAmount.toFixed(2)}`}</span>
             </div>
             <div className={classes.actions}>
                 <button className={classes['button--alt']} onClick={props.onDismiss}>Close</button>
-                <button className={classes.button}>Order</button>
+                {hasItems && <button className={classes.button}>Order</button>}
             </div>
         </CartModal>
     )

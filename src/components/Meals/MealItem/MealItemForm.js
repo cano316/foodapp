@@ -1,20 +1,20 @@
 import React, { useRef, useState } from "react";
-import CartContext from "../../../store/cart-context";
 import Input from "../../UI/Input";
 import classes from './MealItemForm.module.css'
 const MealItemForm = (props) => {
-    const [amountIsValid, setAmountIsValid] = useState(false)
+    const [amountIsValid, setAmountIsValid] = useState(true)
     const amountInputRef = useRef();
 
     const submitHandler = (e) => {
         //since this is a form, we still have to prevent the default behaviour
         e.preventDefault();
-        const enteredAmount = +amountInputRef.current.value;
-        if (enteredAmount < 1 || enteredAmount > 5) {
+        const enteredAmount = amountInputRef.current.value;
+        const enteredAmountNumber = +enteredAmount;
+        if (enteredAmount.trim().length === 0 || enteredAmountNumber < 1 || enteredAmount > 5) {
             setAmountIsValid(false);
             return;
         }
-        props.onAddToCart(enteredAmount);
+        props.onAddToCart(enteredAmountNumber);
     }
 
     return (
@@ -32,7 +32,7 @@ const MealItemForm = (props) => {
                 }}
             />
             <button>+ Add</button>
-            {!setAmountIsValid && <p>Please enter a valid amount (1-5)</p>}
+            {!amountIsValid && <p>Please enter a valid amount (1-5)</p>}
         </form>
     )
 };
